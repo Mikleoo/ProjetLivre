@@ -15,6 +15,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import Dao.DaoFactory;
+import Dao.Interface.UtilisateurDao;
+import Dao.implementations.UtilisateurDaoImpl;
 import Modele.Livre;
 
 @SuppressWarnings("serial")
@@ -144,23 +147,35 @@ public class Fenetre extends JFrame{
             public void actionPerformed(ActionEvent e) {
             	Object[][] data = new Object[table.getRowCount()][table.getColumnCount()];
             	System.out.println("Nombre de ligne dans le tableau : " + table.getRowCount());
+            	
             	for (int row = 0 ; row < table.getRowCount() ; row++) {
+            		
             		System.out.println("\nLigne " + row + " :\n");
+            		
+            		Livre l = new Livre();
+            		l.setNomLivre((String)table.getValueAt(row, 0));
+            		l.setAuteur((String)table.getValueAt(row, 1));
+            		l.setEditeur((String)table.getValueAt(row, 2));
+            		l.setLieu((String)table.getValueAt(row, 3));
+            		l.setDate((String)table.getValueAt(row, 4));
+            		l.setNomPreteur((String)table.getValueAt(row, 5));
+            		UtilisateurDaoImpl udi = new UtilisateurDaoImpl(DaoFactory.getInstance());
+            		udi.creer(l);
+            		
+            		System.out.println(l.getNomLivre());
+            		System.out.println(l.getAuteur());
+            		System.out.println(l.getEditeur());
+            		System.out.println(l.getLieu());
+            		System.out.println(l.getDate());
+            		System.out.println(l.getNomPreteur());
+            		
+            		/*
             		for (int column = 0 ; column < table.getColumnCount() ; column++) {
 	            		System.out.println("Colonne " + table.getColumnName(column) + " : " + table.getValueAt(row, column));
 	            		data[row][column]= table.getValueAt(row, column);
 	            		System.out.println(data[row][column]);
-	            		
-	            		Livre l = new Livre();
-	            		l.setNomLivre((String)table.getValueAt(row, column));
-	            		l.setAuteur((String)table.getValueAt(row, column));
-	            		l.setEditeur((String)table.getValueAt(row, column));
-	            		l.setLieu((String)table.getValueAt(row, column));
-	            		l.setDate((String)table.getValueAt(row, column));
-	            		l.setNomPreteur((String)table.getValueAt(row, column));
-	            		//boolean var = utilisateurDao.creer(l);
-	            		
 	            	}
+	            	*/
             		
             	}
             }
