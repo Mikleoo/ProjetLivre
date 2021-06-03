@@ -15,6 +15,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import Modele.Livre;
+
 @SuppressWarnings("serial")
 public class Fenetre extends JFrame{
 	
@@ -23,6 +25,7 @@ public class Fenetre extends JFrame{
 	
 	// Button
 	private JButton boutonAjouter = new JButton("Ajouter");
+	private JButton boutonSauvegarder = new JButton("Sauvegarder");
 	private JButton boutonSupprimer = new JButton("Supprimer");
 	
 	// Text Fields
@@ -57,7 +60,7 @@ public class Fenetre extends JFrame{
 		/* Form part */
 		
 		// First grid for the form of 13 ligne
-		Panneau panneauForm = new Panneau(new GridLayout(7,2));
+		Panneau panneauForm = new Panneau(new GridLayout(8,2));
 		
 		// Feed my form
 		panneauForm.add(labelNomLivre);
@@ -73,21 +76,16 @@ public class Fenetre extends JFrame{
 		panneauForm.add(labelNomPersonne);
 		panneauForm.add(champNomPersonne);
 		panneauForm.add(boutonAjouter);
+		panneauForm.add(boutonSauvegarder);
 		panneauForm.add(boutonSupprimer);
 		
 		/* Table part */
 		
 		// Columns
-        String[] columns = new String[] {"Livre", "Auteur", "Editeur", "Date Fin Prêt", "Nom"};
+        String[] columns = new String[] {"Livre", "Auteur", "Editeur", "Lieu", "Date Fin Prêt", "Nom"};
          
         // Data for JTable in 2D table
-        Object[][] data = new Object[][] {
-            {"La malade imaginaire", "Molière", "LaFonte", "27/05/2021", "Michel" },
-            {"La malade imaginaire", "Molière", "LaFonte", "27/05/2021", "Michel" },
-            {"La malade imaginaire", "Molière", "LaFonte", "27/05/2021", "Michel" },
-            {"La malade imaginaire", "Molière", "LaFonte", "27/05/2021", "Michel" },
-            {"La malade imaginaire", "Molière", "LaFonte", "27/05/2021", "Michel" },
-        };
+        Object[][] data = new Object[0][5];
  
         // Create a JTable with data and coloms
         tablemodel = new DefaultTableModel(data, columns);
@@ -102,7 +100,9 @@ public class Fenetre extends JFrame{
 		
 		setContentPane(conteneur);
 		
-		// Listener for buttons
+		/* Listener for buttons */
+		
+		// Delete a selected row
 		boutonSupprimer.addActionListener(new ActionListener() {
 			 @Override
 	         public void actionPerformed(ActionEvent ae) {
@@ -115,11 +115,19 @@ public class Fenetre extends JFrame{
 	         }
 		});
 		
+		// Add a row in the table
 		boutonAjouter.addActionListener(new ActionListener() {
 			 @Override
 	         public void actionPerformed(ActionEvent ae) {
 				 if(champNomLivre.getText().length()>0 && champLieu.getText().length()>0) {
 					 tablemodel.addRow(new Object[]{champNomLivre.getText(), champAuteur.getText(), champEditeur.getText(), champLieu.getText(), champDateFinPret.getText(), champNomPersonne.getText()});
+					//Effacer le formulaire aprés l'ajout
+					champNomLivre.setText("");
+					champAuteur.setText("");
+					champEditeur.setText("");
+					champLieu.setText("");
+					champDateFinPret.setText("");
+					champNomPersonne.setText("");
 				 } else {
 					 if(champNomLivre.getText().length()>0) {
 						 JOptionPane.showMessageDialog(null, "Lieu manquant");
@@ -127,8 +135,36 @@ public class Fenetre extends JFrame{
 						 JOptionPane.showMessageDialog(null, "Nom du livre manquant");
 					 }
 				 }
+				 
 	         }
 		});
+		        
+        // Save table
+        boutonSauvegarder.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	Object[][] data = new Object[table.getRowCount()][table.getColumnCount()];
+            	System.out.println("Nombre de ligne dans le tableau : " + table.getRowCount());
+            	for (int row = 0 ; row < table.getRowCount() ; row++) {
+            		System.out.println("\nLigne " + row + " :\n");
+            		for (int column = 0 ; column < table.getColumnCount() ; column++) {
+	            		System.out.println("Colonne " + table.getColumnName(column) + " : " + table.getValueAt(row, column));
+	            		data[row][column]= table.getValueAt(row, column);
+	            		System.out.println(data[row][column]);
+	            		
+	            		Livre l = new Livre();
+	            		l.setNomLivre((String)table.getValueAt(row, column));
+	            		l.setAuteur((String)table.getValueAt(row, column));
+	            		l.setEditeur((String)table.getValueAt(row, column));
+	            		l.setLieu((String)table.getValueAt(row, column));
+	            		l.setDate((String)table.getValueAt(row, column));
+	            		l.setNomPreteur((String)table.getValueAt(row, column));
+	            		//boolean var = utilisateurDao.creer(l);
+	            		
+	            	}
+            		
+            	}
+            }
+        });
 		
 	}
 	
