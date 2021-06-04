@@ -9,13 +9,16 @@ import java.util.Properties;
 
 import com.mysql.cj.jdbc.Driver;
 
+import nico.dao.interf.DaoInterface;
+import nico.dao.impl.*;
+
 /**
  * This class manage connection to database instance
  * It retrieve content of 'dao.properties' to get credentials, host infos and driver infos
  * On success, It will return an instance of the connection (DaoFactory type)
  */
 public class DaoFactory {
-    private static final String FILE_PROPERTIES = "/nico/dao/dao.properties";
+    private static final String FILE_PROPERTIES = "/nico/dao/dao.txt";
     private static final String PROPERTY_URL = "url";
     private static final String PROPERTY_DRIVER = "driver";
     private static final String PROPERTY_USER = "user";
@@ -80,7 +83,7 @@ public class DaoFactory {
         return DriverManager.getConnection(url, username, password);
     }
 
-    public LivreDao getLivreDao() {
+    public DaoInterface getLivreDao() {
         return new LivreDaoImplementation(this);
     }
 }
