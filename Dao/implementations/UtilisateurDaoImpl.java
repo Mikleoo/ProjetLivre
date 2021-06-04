@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import Dao.DaoConfigurationException;
 import Dao.DaoFactory;
@@ -16,7 +18,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
 	private DaoFactory daoFactory;
 
 	// Preparation des requetes sql
-	private static final String SQL_SELECT_PAR_SUPPR = "SELECT livre.nom_livre, livre.date_de_fin, auteur.nom_auteur, editeur.nom_editeur, personne.nom_personne, lieu.nom_lieu FROM livre, auteur, editeur, personne, lieu WHERE est_supprime = false";
+	private static final String SQL_SELECT_PAR_SUPPR = "SELECT livre.nom_livre, livre.date_de_fin, auteur.nom_auteur, editeur.nom_editeur, lieu.nom_lieu, personne.nom_personne FROM livre INNER JOIN auteur ON livre.id_auteur = auteur.id_auteur INNER JOIN editeur ON livre.id_editeur = editeur.id_editeur INNER JOIN lieu ON livre.id_lieu = lieu.id_lieu INNER JOIN personne ON livre.id_personne = personne.id_personne WHERE est_supprime = false";
 	private static final String SQL_INSERT_LIVRE = "INSERT INTO livre (nom_livre, date_de_fin) VALUES (?, ?)";
 	private static final String SQL_INSERT_AUTEUR = "INSERT INTO auteur (nom_auteur) VALUES (?)";
 	private static final String SQL_INSERT_EDITEUR = "INSERT INTO editeur (nom_editeur) VALUES (?)";
@@ -56,9 +58,10 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
 	}
 	
 	// Fonction trouver qui cherche un utilisateur via son nom et remplie notre class Utilisateur
-	public Livre trouver() throws DaoConfigurationException {
+	public List<Livre> trouver() throws DaoConfigurationException {
 	    PreparedStatement preparedStatement = null;
 	    ResultSet res = null;
+	    List<Livre> livre = new ArrayList<Livre>();
 
 	    try {
 	        // Recuperation d'une connexion depuis la Factory
@@ -67,7 +70,7 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
 	        preparedStatement = DaoUtilitaire.initialisationRequetePreparee(connexion, SQL_SELECT_PAR_SUPPR, true);
 	        res = preparedStatement.executeQuery();
 	        // Set les infos dans notre class Utilisateur
-	        if(res.next()){
+	        while(res.next()){
 	        	Livre u = new Livre();
 	        	u.setNomLivre(res.getString("nom_livre"));
 	        	u.setDate(res.getString("date_de_fin"));
@@ -76,16 +79,15 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
 	        	u.setLieu(res.getString("nom_lieu"));
 	        	u.setNomPreteur(res.getString("nom_personne"));
 	        	u.setEditeur(res.getString("nom_editeur"));
-	        	//u.setAuteur(res.getInt("id"));
-                return u;
+	        	livre.add(u);
+	        	System.out.println(u.toString());
             }
 	        res.close();
             preparedStatement.close();
-            
 	    } catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+	    return livre;
 	}
 	
 }
