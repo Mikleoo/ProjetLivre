@@ -19,7 +19,8 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
 
 	// Preparation des requetes sql
 	private static final String SQL_SELECT_PAR_SUPPR = "SELECT livre.nom_livre, livre.date_de_fin, auteur.nom_auteur, editeur.nom_editeur, lieu.nom_lieu, personne.nom_personne FROM livre INNER JOIN auteur ON livre.id_auteur = auteur.id_auteur INNER JOIN editeur ON livre.id_editeur = editeur.id_editeur INNER JOIN lieu ON livre.id_lieu = lieu.id_lieu INNER JOIN personne ON livre.id_personne = personne.id_personne WHERE est_supprime = false";
-	private static final String SQL_INSERT_LIVRE = "INSERT INTO livre (nom_livre, date_de_fin) VALUES (?, ?)";
+	private static final String SQL_SELECT_ID_MAX = "SELECT max(id_auteur), max(id_editeur), max(id_lieu), max(id_personne) FROM auteur, editeur, lieu, personne";
+	private static final String SQL_INSERT_LIVRE = "INSERT INTO livre (nom_livre, date_de_fin, id_auteur, id_editeur, id_lieu, id_personne) VALUES (?, ?, ?, ?, ?, ?)";
 	private static final String SQL_INSERT_AUTEUR = "INSERT INTO auteur (nom_auteur) VALUES (?)";
 	private static final String SQL_INSERT_EDITEUR = "INSERT INTO editeur (nom_editeur) VALUES (?)";
 	private static final String SQL_INSERT_LIEU = "INSERT INTO lieu (nom_lieu) VALUES (?)";
@@ -33,13 +34,12 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
 	public boolean creer(Livre livre) throws DaoConfigurationException {
 		Connection connexion = null;
 	    PreparedStatement preparedStatement = null;
+	    ResultSet res = null;
 
 	    try {
 	        // Recuperation d'une connexion depuis la Factory
 	        connexion = daoFactory.getConnection();
 	        // Preparation de la requete puis envoie
-	        preparedStatement = DaoUtilitaire.initialisationRequetePreparee(connexion, SQL_INSERT_LIVRE, true, livre.getNomLivre(), livre.getDate());
-	        preparedStatement.executeUpdate();
 	        preparedStatement = DaoUtilitaire.initialisationRequetePreparee(connexion, SQL_INSERT_AUTEUR, true, livre.getAuteur());
 	        preparedStatement.executeUpdate();
 	        preparedStatement = DaoUtilitaire.initialisationRequetePreparee(connexion, SQL_INSERT_EDITEUR, true, livre.getEditeur());
@@ -48,6 +48,13 @@ public class UtilisateurDaoImpl implements UtilisateurDao {
 	        preparedStatement.executeUpdate();
 	        preparedStatement = DaoUtilitaire.initialisationRequetePreparee(connexion, SQL_INSERT_PERSONNE, true, livre.getNomPreteur());
 	        preparedStatement.executeUpdate();
+	        
+	        preparedStatement = DaoUtilitaire.initialisationRequetePreparee(connexion, SQL_SELECT_ID_MAX, true);
+	        res = preparedStatement.executeQuery();
+	        res.next();
+	        preparedStatement = DaoUtilitaire.initialisationRequetePreparee(connexion, SQL_INSERT_LIVRE, true, livre.getNomLivre(), livre.getDate(), res.getInt("max(id_auteur)"), res.getInt("max(id_editeur)"), res.getInt("max(id_lieu)"), res.getInt("max(id_personne)"));
+	        preparedStatement.executeUpdate();
+	        
             preparedStatement.close();
             System.out.println("Requete SQL bien execute");
             return true;
