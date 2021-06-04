@@ -1,5 +1,7 @@
 package InterfaceGraphique;
 
+import Dao.DaoFactory;
+
 public class Main {
 	
 	public static void main(String[] args) {

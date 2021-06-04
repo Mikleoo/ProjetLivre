@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,7 +18,6 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import Dao.DaoFactory;
-import Dao.Interface.UtilisateurDao;
 import Dao.implementations.UtilisateurDaoImpl;
 import Modele.Livre;
 
@@ -88,7 +89,20 @@ public class Fenetre extends JFrame{
         String[] columns = new String[] {"Livre", "Auteur", "Editeur", "Lieu", "Date Fin Prêt", "Nom"};
          
         // Data for JTable in 2D table
-        Object[][] data = new Object[0][5];
+        UtilisateurDaoImpl udi = new UtilisateurDaoImpl(DaoFactory.getInstance());
+        List<Livre> l = new ArrayList<Livre>();
+		l = udi.trouver();
+		
+		Object[][] data = new Object[l.size()][5];
+		int i = 0;
+		for (Livre var:l) {
+			
+			//for (int i = 0; l.size() < i ; i++) {
+				data[i] = new String[]{var.getNomLivre(), var.getAuteur(), var.getEditeur(), var.getLieu(), var.getDate(), var.getNomPreteur()};
+			//}
+			i++;
+		}
+        
  
         // Create a JTable with data and coloms
         tablemodel = new DefaultTableModel(data, columns);
@@ -145,7 +159,7 @@ public class Fenetre extends JFrame{
         // Save table
         boutonSauvegarder.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	Object[][] data = new Object[table.getRowCount()][table.getColumnCount()];
+            	//Object[][] data = new Object[table.getRowCount()][table.getColumnCount()];
             	System.out.println("Nombre de ligne dans le tableau : " + table.getRowCount());
             	
             	for (int row = 0 ; row < table.getRowCount() ; row++) {
@@ -162,6 +176,7 @@ public class Fenetre extends JFrame{
             		UtilisateurDaoImpl udi = new UtilisateurDaoImpl(DaoFactory.getInstance());
             		udi.creer(l);
             		
+            		/*
             		System.out.println(l.getNomLivre());
             		System.out.println(l.getAuteur());
             		System.out.println(l.getEditeur());
@@ -169,7 +184,7 @@ public class Fenetre extends JFrame{
             		System.out.println(l.getDate());
             		System.out.println(l.getNomPreteur());
             		
-            		/*
+            		
             		for (int column = 0 ; column < table.getColumnCount() ; column++) {
 	            		System.out.println("Colonne " + table.getColumnName(column) + " : " + table.getValueAt(row, column));
 	            		data[row][column]= table.getValueAt(row, column);
