@@ -3,6 +3,7 @@ package Dao;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -12,7 +13,7 @@ import Dao.Interface.UtilisateurDao;
 public class DaoFactory {
 	
 	// On configure toutes nos constantes pour le fichier de configuration
-	private static final String FICHIER_PROPERTIES = "/Config/config.txt";
+	private static final String FICHIER_PROPERTIES = "Dao/config.properties";
 	private static final String PROPERTY_URL = "url";
 	private static final String PROPERTY_DRIVER = "driver";
 	private static final String PROPERTY_NOM_UTILISATEUR = "nomutilisateur";
@@ -74,14 +75,13 @@ public class DaoFactory {
 	
 	//Methode chargee de fournir une connexion a la base de donnees
 	public Connection getConnection() throws SQLException {
-		return con;
+		return DriverManager.getConnection(url, nomUtilisateur, motDePasse);
 	}
 
 	//Methodes de recuperation de l'implementation des differents DAO (un seulpour le moment)
 	public UtilisateurDao getUtilisateurDao() {
 			return new UtilisateurDaoImpl(getInstance());
 	}
-	
 	
 
 }
