@@ -1,13 +1,17 @@
 package Modele;
 
+import java.util.Date;
+
 public class Livre {
 	
 	private String NomLivre;
 	private String Auteur;
 	private String Editeur;
 	private String Lieu;
-	private String Date;
+	private String date;
 	private String NomPreteur;
+	
+	
 	
 	// Setters
 
@@ -28,7 +32,7 @@ public class Livre {
 	}
 	
 	public void setDate(String Date) {
-		this.Date = Date;
+		this.date = Date;
 	}
 	
 	public void setNomPreteur(String NomPreteur) {
@@ -42,7 +46,7 @@ public class Livre {
 	}
 
 	public String getDate() {
-		return Date;
+		return date;
 	}
 
 	public String getAuteur() {
@@ -60,6 +64,5 @@ public class Livre {
 	public String getNomPreteur() {
 		return NomPreteur;
 	}
-	
 
 }
