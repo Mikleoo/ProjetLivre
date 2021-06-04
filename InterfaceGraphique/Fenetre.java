@@ -24,6 +24,8 @@ import Modele.Livre;
 @SuppressWarnings("serial")
 public class Fenetre extends JFrame{
 	
+	private ArrayList<Livre> livreAjouter = new ArrayList<Livre>();
+	
 	private JPanel conteneur = new JPanel();
 	private DefaultTableModel tablemodel;
 	
@@ -138,7 +140,8 @@ public class Fenetre extends JFrame{
 	         public void actionPerformed(ActionEvent ae) {
 				 if(champNomLivre.getText().length()>0 && champLieu.getText().length()>0) {
 					 tablemodel.addRow(new Object[]{champNomLivre.getText(), champAuteur.getText(), champEditeur.getText(), champLieu.getText(), champDateFinPret.getText(), champNomPersonne.getText()});
-					//Effacer le formulaire aprés l'ajout
+					 livreAjouter.add(new Livre(champNomLivre.getText(), champAuteur.getText(), champEditeur.getText(), champLieu.getText(), champDateFinPret.getText(), champNomPersonne.getText()));
+					 //Effacer le formulaire aprés l'ajout
 					champNomLivre.setText("");
 					champAuteur.setText("");
 					champEditeur.setText("");
@@ -162,8 +165,10 @@ public class Fenetre extends JFrame{
             	//Object[][] data = new Object[table.getRowCount()][table.getColumnCount()];
             	System.out.println("Nombre de ligne dans le tableau : " + table.getRowCount());
             	
-            	for (int row = 0 ; row < table.getRowCount() ; row++) {
+            	//for (int row = 0 ; row < table.getRowCount() ; row++) {
+            	for(Livre l : livreAjouter) {
             		
+            		/*
             		System.out.println("\nLigne " + row + " :\n");
             		
             		Livre l = new Livre();
@@ -173,6 +178,9 @@ public class Fenetre extends JFrame{
             		l.setLieu((String)table.getValueAt(row, 3));
             		l.setDate((String)table.getValueAt(row, 4));
             		l.setNomPreteur((String)table.getValueAt(row, 5));
+            		*/
+            		
+            		
             		UtilisateurDaoImpl udi = new UtilisateurDaoImpl(DaoFactory.getInstance());
             		udi.creer(l);
             		
