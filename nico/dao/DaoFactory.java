@@ -11,6 +11,7 @@ import com.mysql.cj.jdbc.Driver;
 
 import nico.dao.interf.DaoInterface;
 import nico.dao.impl.*;
+import nico.dao.*;
 
 /**
  * This class manage connection to database instance
@@ -18,7 +19,7 @@ import nico.dao.impl.*;
  * On success, It will return an instance of the connection (DaoFactory type)
  */
 public class DaoFactory {
-    private static final String FILE_PROPERTIES = "/nico/dao/dao.txt";
+    private static final String FILE_PROPERTIES = "nico/dao/dao.txt";
     private static final String PROPERTY_URL = "url";
     private static final String PROPERTY_DRIVER = "driver";
     private static final String PROPERTY_USER = "user";
@@ -48,7 +49,7 @@ public class DaoFactory {
 
         // Avoid FileNotFoundException handles
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream fileProperties = classLoader.getResourceAsStream(FILE_PROPERTIES);
+        InputStream fileProperties = classLoader.getResourceAsStream(DaoFactory.FILE_PROPERTIES);
 
         if(fileProperties == null) {
             throw new DaoConfigurationException("file properties " + FILE_PROPERTIES + " not found.");

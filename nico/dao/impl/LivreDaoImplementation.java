@@ -15,7 +15,7 @@ public class LivreDaoImplementation implements DaoInterface {
     
     private DaoFactory daoFactory;
 
-    private static final String SQL_SELECT_BY_IS_NOT_DELETED = "SELECT livre.nom_livre, livre.date_de_fin, auteur.nom_auteur, editeur.nom_editeur, personne.nom_personne, lieu.nom_lieu FROM livre, auteur, editeur, personne, lieu WHERE est_supprime = ?";
+    private static final String SQL_SELECT_BY_IS_NOT_DELETED = "SELECT * FROM livre WHERE est_supprime = ?";
 
     /**
      * Constructor
@@ -57,7 +57,7 @@ public class LivreDaoImplementation implements DaoInterface {
         livre.setIdIsbn(resultSet.getInt("id_isbn"));
         livre.setNomLivre(resultSet.getString("nom_livre"));
         livre.setDateDeFin(resultSet.getDate("date_de_fin"));
-        livre.setEstSupprime(resultSet.getBoolean("est_supprime"));
+        livre.setEstSupprime(resultSet.getInt("est_supprime"));
         livre.setIdAuteur(resultSet.getInt("id_auteur"));
         livre.setIdEditeur(resultSet.getInt("id_editeur"));
         livre.setIdPersonne(resultSet.getInt("id_personne"));

@@ -7,7 +7,7 @@ public class Livre {
     protected int idIsbn;
     protected String nomLivre;
     protected Date dateDeFin;
-    protected boolean estSupprime;
+    protected int estSupprime;
     protected int idAuteur;
     protected int idEditeur;
     protected int idPersonne;
@@ -15,7 +15,7 @@ public class Livre {
 
     public Livre() {}
 
-    public Livre(int idIsbn, String nomLivre, Date dateDeFin, boolean estSupprime, int idAuteur, int idEditeur, int idPersonne, int idLieu) {
+    public Livre(int idIsbn, String nomLivre, Date dateDeFin, int estSupprime, int idAuteur, int idEditeur, int idPersonne, int idLieu) {
         this.idIsbn = idIsbn;
         this.nomLivre = nomLivre;
         this.dateDeFin = dateDeFin;
@@ -50,15 +50,11 @@ public class Livre {
         this.dateDeFin = dateDeFin;
     }
 
-    public boolean isEstSupprime() {
+    public int getEstSupprime() {
         return this.estSupprime;
     }
 
-    public boolean getEstSupprime() {
-        return this.estSupprime;
-    }
-
-    public void setEstSupprime(boolean estSupprime) {
+    public void setEstSupprime(int estSupprime) {
         this.estSupprime = estSupprime;
     }
 
@@ -100,7 +96,7 @@ public class Livre {
             " idIsbn='" + getIdIsbn() + "'" +
             ", nomLivre='" + getNomLivre() + "'" +
             ", dateDeFin='" + getDateDeFin() + "'" +
-            ", estSupprime='" + isEstSupprime() + "'" +
+            ", estSupprime='" + getEstSupprime() + "'" +
             ", idAuteur='" + getIdAuteur() + "'" +
             ", idEditeur='" + getIdEditeur() + "'" +
             ", idPersonne='" + getIdPersonne() + "'" +
